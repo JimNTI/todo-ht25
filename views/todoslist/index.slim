@@ -1,0 +1,17 @@
+h1 Alla frukter 
+
+form action="/todolist" method="get"
+  input name="q" placeholder="Search for your ToDo"
+  
+  input type="submit" value="Search"
+
+
+-   @datatodo.each do |todo|
+    h2 
+      a href="/todolist/#{todo["id"]}/edit" #{todo["name"]}
+
+
+    form action="todolist/#{todo["id"]}/delete" method="post"
+      input type="submit" value="❤️‍🔥DELETE"
+    hr
+

@@ -1,7 +1,36 @@
 body {
   font-family: sans-serif;
-  color: #666;
-  background-color: #f1f1f1;
+  color: white;
+  background-color: rgb(44, 177, 44);
   font-size: x-large;
   margin: 1em;
+}
+
+h1 {
+  text-align: center;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  background-color: aqua;
+  display: flex;
+}
+
+.todo {
+  background-color: rgb(41, 211, 143);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 80vw;
+}
+
+.todo h2 {
+  text-align: center;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
 }

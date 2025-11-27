@@ -1,0 +1,20 @@
+
+
+h1 Alla Todos
+
+section
+  div.center
+    form action="/todos" method="get"
+      input name="q" placeholder="Sök på todo"
+      input type="submit" value="Sök!"
+    a href="/todos/new" Lägg till ny Todo
+
+  - @todos.each do |todo|
+    div.todo
+      h2 = todo["name"]
+      h4 = todo["description"]
+
+      form action="/todos/#{todo["id"]}/delete" method="post"
+        input type="submit" value="❤️‍🔥DELETE"
+      button
+        a href="/todos/#{todo["id"]}/edit" EDIT TODO

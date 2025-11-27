@@ -5,40 +5,64 @@ require 'sinatra/reloader'
 
 
 
+get('/todos') do
+  query = params[:q]
 
-post('/todo/:id') do
-    todo_id = params[todo_id]
-    "You request ##{todo_id}"
+  db = SQLite3::Database.new("db/todos.db")
+  db.results_as_hash = true
+
+  if query && !query.empty?
+    @todos = db.execute("SELECT * FROM todos WHERE name LIKE ?", "%#{query}%")
+  else
+    @todos = db.execute("SELECT * FROM todos")
+  end
+
+  slim(:"todos/index")
 end
 
 
-get('/todoslist') do
+post('/todo') do
+  new_todo = params[:name]
+  new_description = params[:description]
 
-  query = params[:q]
-  p "Yo skrev #{query}"
-
-  #gör koppling till db
   db = SQLite3::Database.new("db/todos.db")
+  db.execute("INSERT INTO todos (name, description) VALUES (?, ?)", [new_todo, new_description])
 
-  #[{},{},{}] önskar vi oss istället för [[], [],[]]
+  redirect('/todos')
+end
+
+get('/todos/:id/edit') do
+  db = SQLite3::Database.new("db/todos.db")
   db.results_as_hash = true
+  id = params[:id].to_i
+  @unique_todos = db.execute("SELECT * FROM todos WHERE id = ?", id).first
 
-  #hämta allting från db
-  @datatodo = db.execute("SELECT * FROM todoslist")    
+  #show formula for updating
+  slim(:"todos/edit")
+end
 
-  p @datatodo
+post('/todos/:id/update') do
 
-  if query && !query.empty?
-    @datatodo = db.execute("SELECT * FROM todoslist WHERE name LIKE ?","%#{query}%")
-  else
-    @datatodo = db.execute("SELECT * FROM todoslist")
-  end
+  id = params[:id].to_i
+  name = params[:name]
+  description = params[:description]
 
-  #visa med slim
-  slim(:"todoslist/index")
+  db = SQLite3::Database.new("db/todos.db")
+  db.execute("UPDATE todos SET name=?, description=? WHERE id=?",[name,description,id])
+  redirect('/todos')
+end
 
+post('/todos/:id/delete') do
+  id = params[:id].to_i
 
+  db = SQLite3::Database.new("db/todos.db")
+  db.execute("DELETE FROM todos WHERE id = ?", id)
 
+  redirect('/todos')
+end
+
+get('/todos/new') do
+  slim(:"todos/new")
 end
 
 

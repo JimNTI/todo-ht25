@@ -10,11 +10,27 @@ section
     a href="/todos/new" Lägg till ny Todo
 
   - @todos.each do |todo|
+    - next if todo["state"] == 1
     div.todo
       h2 = todo["name"]
       h4 = todo["description"]
 
       form action="/todos/#{todo["id"]}/delete" method="post"
         input type="submit" value="❤️‍🔥DELETE"
+      form action="/todos/#{todo["id"]}/state" method="post"
+        input type="submit" value="DONE"
+
       button
         a href="/todos/#{todo["id"]}/edit" EDIT TODO
+
+h1 Finished Todos
+section
+  - @todos.each do |todo|
+    - next if todo["state"] == 0
+    div.todo
+      h2 = todo["name"]
+      h4 = todo["description"]
+      form action="/todos/#{todo["id"]}/delete" method="post"
+        input type="submit" value="❤️‍🔥DELETE"
+      form action="/todos/#{todo["id"]}/state" method="post"
+        input type="submit" value="UNDO"
